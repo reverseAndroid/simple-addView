@@ -1,11 +1,10 @@
 package com.xjx.addview;
 
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -20,7 +19,7 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private LinearLayout mLinearLayout;
-    private Button mButtonAdd,mButtonGet;
+    private Button mButtonAdd, mButtonGet;
     private View mView;
     private TextView mTextView1, mTextView2;
     private EditText mEditText1, mEditText2;
@@ -28,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int position;
     //存储添加的View
     private Map<Integer, View> mapView = new HashMap<>();
-    private List<String> editText=new ArrayList<>();
+    private List<String> editText = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,23 +41,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mButtonAdd = (Button) findViewById(R.id.main_btn_add);
         mButtonAdd.setOnClickListener(this);
 
-        mButtonGet= (Button) findViewById(R.id.main_btn_get);
+        mButtonGet = (Button) findViewById(R.id.main_btn_get);
         mButtonGet.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.main_btn_add:
                 addItemView();
                 break;
 
             case R.id.main_btn_get:
-                boolean b=getEditItem();
-                if (!b){
+                //通过getEditItem的返回值，判断程序是否继续往下走
+                boolean b = getEditItem();
+                if (!b) {
                     return;
                 }
-                Toast.makeText(this, "我是editText，我存了"+editText.size()+"个EditText", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "我是editText，我存了" + editText.size() + "个EditText", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -93,10 +93,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                int positionView= (int) view.getTag();
+                                //根据点击的当前View，获取上面存储的tag
+                                int positionView = (int) view.getTag();
+                                //通过map集合把刚获得的tag放进去，从而获取到当前要删除的view
                                 mLinearLayout.removeView(mapView.get(positionView));
+                                //移除掉这个tag
                                 mapView.remove(positionView);
-                                if (mapView.size()==0){
+                                //当map集合删除掉最后一条时，会初始化tag和view
+                                if (mapView.size() == 0) {
                                     position = 0;
                                     editText.clear();
                                     mLinearLayout.removeAllViews();
@@ -116,11 +120,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private boolean getEditItem() {
-        for (int i = 0; i <mLinearLayout.getChildCount(); i++) {
-            View childAtView=mLinearLayout.getChildAt(i);
-            mEditText1=childAtView.findViewById(R.id.item_et);
-            mEditText2=childAtView.findViewById(R.id.item_et1);
-            if (!mEditText1.getText().toString().equals("")&&!mEditText2.getText().toString().equals("")) {
+        //getChildCount()此方法可以获取到当前的linearLayout里含有多少个view
+        for (int i = 0; i < mLinearLayout.getChildCount(); i++) {
+            //将每一个view遍历出来，然后findViewById后，就可以获取EditText的值
+            View childAtView = mLinearLayout.getChildAt(i);
+            mEditText1 = childAtView.findViewById(R.id.item_et);
+            mEditText2 = childAtView.findViewById(R.id.item_et1);
+            if (!mEditText1.getText().toString().equals("") && !mEditText2.getText().toString().equals("")) {
                 editText.add(mEditText1.getText().toString());
                 editText.add(mEditText2.getText().toString());
             } else {
