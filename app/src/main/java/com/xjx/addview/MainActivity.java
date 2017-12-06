@@ -76,7 +76,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mLinearLayout.addView(mView, params);
         //给当前添加的View设置一个tag,这一步很重要。如果没有这个tag，我们后面无法取出view
         mView.setTag(position);
+        //将tag和当前生成的view存入集合
         mapView.put(position, mView);
+        //让tag自增一下，因为tag在这还承担着当前view序号的作用
         position++;
         mTextView1.setText("我是第" + position + "条" + "第1个TextView");
         mTextView2.setText("我是第" + position + "条" + "第2个TextView");
@@ -94,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                //根据点击的当前View，获取上面存储的tag
+                                //根据点击的当前View，获取上面存储的tag，这个view就是onLongClick（View view）里的这个view，直接拿来用，他可以判断出当前点击的哪一个view
                                 int positionView = (int) view.getTag();
                                 //通过map集合把刚获得的tag放进去，从而获取到当前要删除的view
                                 mLinearLayout.removeView(mapView.get(positionView));
