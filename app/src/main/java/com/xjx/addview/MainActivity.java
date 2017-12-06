@@ -20,10 +20,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private LinearLayout mLinearLayout;
     private Button mButtonAdd, mButtonGet;
-    private View mView;
     private TextView mTextView1, mTextView2;
     private EditText mEditText1, mEditText2;
-    //标记这是第几次添加的item
+    private View mView;
+    //标记这是第几次添加的item,也是作为一个tag来使用
     private int position;
     //存储添加的View
     private Map<Integer, View> mapView = new HashMap<>();
@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    //动态添加一个item的方法
     private void addItemView() {
         mView = new View(MainActivity.this);
         mView = View.inflate(this, R.layout.item_main, null);
